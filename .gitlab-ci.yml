@@ -1,0 +1,48 @@
+image: registry.internal.codefriend.top/laradock/workspace:latest
+variables:
+  IMAGE: registry.internal.codefriend.top/azur/php80-fpm
+  ISSUER: letsencrypt-staging
+  BASE_APP_HOST: frp2.codefriend.top
+  BASE_APP_INNER_HOST: internal.codefriend.top
+  GIT_DEPTH: 1
+stages:
+  - build
+
+build-php-fpm-image-dev:
+  dependencies: []
+  stage: build
+  script:
+    - echo $DOCKER_PWD
+    - echo $DOCKER_USER
+    - docker login registry.internal.codefriend.top -u 'chenzheyu'  -p ${WF_DOCKER_PWD}
+    - docker build -t $IMAGE:dev .
+    - docker push $IMAGE:dev
+  only:
+    - develop
+
+build-php-fpm-image-production:
+  dependencies: []
+  stage: build
+  script:
+    - echo $DOCKER_PWD
+    - echo $DOCKER_USER
+    - docker login registry.internal.codefriend.top -u 'chenzheyu'  -p ${WF_DOCKER_PWD}
+    - docker build -t $IMAGE:production .
+    - docker push $IMAGE:production
+  only:
+    - production
+
+build-php-fpm-image-latest:
+  dependencies: []
+  stage: build
+  script:
+    - echo $DOCKER_PWD
+    - echo $DOCKER_USER
+    - docker login registry.internal.codefriend.top -u 'chenzheyu'  -p ${WF_DOCKER_PWD}
+    - docker build -t $IMAGE:latest .
+    - docker push $IMAGE:latest
+  only:
+    - master
+
+  
+

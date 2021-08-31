@@ -9,7 +9,7 @@ FROM php:8.0-fpm
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update; \
+RUN apt-get update -yqq; \
     apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
             apt-utils \
@@ -24,28 +24,20 @@ RUN apt-get update; \
             libssl-dev \
             libmcrypt-dev \
             libonig-dev \
-            supervisor
+            libzip-dev zip unzip \
+            zlib1g-dev \
+            supervisor;
 
-RUN docker-php-ext-install bcmath exif mysqli mbstring opcache pcntl pdo pdo_mysql tokenizer xml
-    # Install the PHP gd library
-RUN docker-php-ext-configure gd --prefix=/usr --with-jpeg --with-freetype && \
-    docker-php-ext-install gd
-
-RUN apt-get update -yqq && \
-    pecl channel-update pecl.php.net && \
-    apt-get install -yqq \
-      apt-utils \
-      libzip-dev zip unzip && \
+RUN pecl channel-update pecl.php.net && \
       docker-php-ext-configure zip && \
       docker-php-ext-install zip && \
-      php -m | grep -q 'zip' && \
-      apt-get -y install libxslt-dev && \
-      docker-php-ext-install xsl
+      php -m | grep -q 'zip'
 
 RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis;
 
+RUN docker-php-ext-install opcache;
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 RUN rm -rf /var/lib/apt/lists/*

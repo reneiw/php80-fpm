@@ -16,7 +16,7 @@ RUN apt-get update -yqq; \
             cron \
             curl \
             libmemcached-dev \
-            libz-dev \
+            libicu-dev \
             libpq-dev \
             libjpeg-dev \
             libpng-dev \
@@ -24,6 +24,7 @@ RUN apt-get update -yqq; \
             libssl-dev \
             libmcrypt-dev \
             libonig-dev \
+            libz-dev \
             libzip-dev zip unzip \
             zlib1g-dev \
             supervisor;

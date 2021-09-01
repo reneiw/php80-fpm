@@ -28,10 +28,28 @@ RUN apt-get update -yqq; \
             zlib1g-dev \
             supervisor;
 
+RUN docker-php-ext-install bcmath && \
+    docker-php-ext-install calendar && \
+    docker-php-ext-install exif && \
+    docker-php-ext-install gettext && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install intl && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-install opcache && \
+    docker-php-ext-install pcntl && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install sysvmsg && \
+    docker-php-ext-install sysvsem && \
+    docker-php-ext-install sysvshm
+
 RUN pecl channel-update pecl.php.net && \
       docker-php-ext-configure zip && \
       docker-php-ext-install zip && \
       php -m | grep -q 'zip'
+
+    # Install the PHP gd library
+RUN docker-php-ext-configure gd --prefix=/usr --with-jpeg --with-freetype && \
+    docker-php-ext-install gd
 
 RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \

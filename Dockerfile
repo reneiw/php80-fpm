@@ -25,9 +25,13 @@ RUN apt-get update -yqq; \
             libmcrypt-dev \
             libonig-dev \
             libz-dev \
-            libzip-dev zip unzip \
-            zlib1g-dev \
-            supervisor;
+            libzip-dev \
+            supervisor \
+            sudo \
+            unzip \
+            zip \
+            zlib1g-dev;
+
 
 RUN docker-php-ext-install bcmath && \
     docker-php-ext-install calendar && \
